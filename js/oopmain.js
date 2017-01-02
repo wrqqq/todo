@@ -1,13 +1,26 @@
 (function(){
   'use strict';
-  var Todo = {
-    
+  var Todo = function() {
+    render: function() {
+      var tmp = '';
+      var mass = '';
+      this.Todos.collection.forEach(function(elem, i, arr) {
+        mass += '<div class="todo_wrap animated fadeIn"><div class="todo animated fadeIn" data-index=' + i + '>' + elem.title + '</div><div class="del"></div></div>';
+      })
+      tmp = mass;
+      mass = '';
+      $('#list').html(tmp);
+    }
   }; //Model
   var Todos = function() {
+    this.Todo = new Todo();
     this.collection = [];
     this.addTodo = function (todo) {
       this.collection.push(todo);
     }
+    this.deleteTodo = function (todo) {
+      this.collection.splice(todo, 1);
+    } 
   }; //collection
 
   var App = function() {
@@ -20,15 +33,8 @@
     addTodo: function() {
       this.Todos.addTodo(object)
     },
-    render: function() {
-      var tmp = '';
-      var mass = '';
-      this.Todos.collection.forEach(function(elem, i, arr) {
-        mass += '<div class="todo_wrap animated fadeIn"><div class="todo animated fadeIn" data-index=' + i + '>' + elem.title + '</div><div class="del"></div></div>';
-      })
-      tmp = mass;
-      mass = '';
-      $('#list').html(tmp);
+    deleteTodo: function() {
+      this.Todos.deleteTodo(object)
     },
     initEvents: function() {
       // body... 
@@ -45,6 +51,7 @@
           rend: false
         });
         this.render();
+        console.log(this.Todos.collection);
       }
     },
     clearInp: function() {
@@ -53,7 +60,8 @@
     deleteTodo: function(e) {
       e.currentTarget.parentNode.remove();
       var target = e.currentTarget;
-      this.Todos.collection.splice(target.getAttribute('data-index'), 1)
+      var targetAtr = target.getAttribute('data-index');
+      this.Todos.deleteTodo({targetAtr});
     }
   }
     window.app = new App();
