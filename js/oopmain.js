@@ -24,8 +24,7 @@
       var tmp = '';
       var mass = '';
       this.Todos.collection.forEach(function(elem, i, arr) {
-        mass += '<div data-index=' + i + '>' + elem.title + '</div>';
-
+        mass += '<div class="todo_wrap animated fadeIn"><div class="todo animated fadeIn" data-index=' + i + '>' + elem.title + '</div><div class="del"></div></div>';
       })
       tmp = mass;
       mass = '';
@@ -35,23 +34,27 @@
       // body... 
       var _this = this;
       $(document).on('click', '#btn', function(){return _this.makeTodo()})
-      .on('click', '#btn', function(e){return _this.todoText(e)})
-    },
+      .on('click', '#btn', function(){return _this.clearInp()})
+      .on('click', '.del', function(e){return _this.deleteTodo(e)})
+    },  
     makeTodo: function() {
-      this.Todos.addTodo({
-        title: $('input').val(),
-        resolved:false,
-        rend: false
-      });
-      console.log(this.Todos);
-      this.render();
+      if ($('input').val().trim()) {
+        this.Todos.addTodo({
+          title: $('input').val(),
+          resolved:false,
+          rend: false
+        });
+        this.render();
+      }
     },
-    todoText: function(e) {
-      console.log(e.currentTarget);
+    clearInp: function() {
+      $('input').val('');
+    },
+    deleteTodo: function(e) {
+      e.currentTarget.parentNode.remove();
+      var target = e.currentTarget;
+      this.Todos.collection.splice(target.getAttribute('data-index'), 1)
     }
   }
-
-
     window.app = new App();
-
 })()
