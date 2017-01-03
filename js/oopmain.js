@@ -1,19 +1,12 @@
 (function(){
   'use strict';
-  var Todo = function() {
-    render: function() {
-      var tmp = '';
-      var mass = '';
-      this.Todos.collection.forEach(function(elem, i, arr) {
-        mass += '<div class="todo_wrap animated fadeIn"><div class="todo animated fadeIn" data-index=' + i + '>' + elem.title + '</div><div class="del"></div></div>';
-      })
-      tmp = mass;
-      mass = '';
-      $('#list').html(tmp);
+  var Todo = {
+    defaults: {
+      title: 'def',
+      resolved: 'def' 
     }
   }; //Model
   var Todos = function() {
-    this.Todo = new Todo();
     this.collection = [];
     this.addTodo = function (todo) {
       this.collection.push(todo);
@@ -35,6 +28,16 @@
     },
     deleteTodo: function() {
       this.Todos.deleteTodo(object)
+    },
+    render: function() {
+      var tmp = '';
+      var mass = '';
+      this.Todos.collection.forEach(function(elem, i, arr) {
+        mass += '<div class="todo_wrap animated fadeIn"><div class="todo animated fadeIn" data-index=' + i + '>' + elem.title + '</div><div class="del"></div></div>';
+      })
+      tmp = mass;
+      mass = '';
+      $('#list').html(tmp);
     },
     initEvents: function() {
       // body... 
